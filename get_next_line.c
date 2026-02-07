@@ -6,7 +6,7 @@
 /*   By: ofedota <ofedota@student.42prague.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 07:37:20 by ofedota           #+#    #+#             */
-/*   Updated: 2026/01/08 18:16:21 by ofedota          ###   ########.fr       */
+/*   Updated: 2026/01/10 15:19:24 by ofedota          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,7 @@ static char	*read_and_stash(int fd, char *stash)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
-		{
-			free(buffer);
-			free(stash);
-			return (NULL);
-		}
-		if (bytes_read == 0)
-			break ;
+			return (free(buffer), free(stash), NULL);
 		buffer[bytes_read] = '\0';
 		stash = join_and_free(stash, buffer);
 		if (!stash)
@@ -116,8 +110,7 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!stash || !ft_strchr(stash, '\n'))
-		stash = read_and_stash(fd, stash);
+	stash = read_and_stash(fd, stash);
 	if (!stash)
 		return (NULL);
 	line = extract_line(stash);
